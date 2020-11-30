@@ -1,0 +1,60 @@
+调用系统相机：
+
+@NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA})
+    void openCamera() {
+        try {
+            Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            // 判断是否有相机
+            if (captureIntent.resolveActivity(getPackageManager()) != null) {
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(MediaStore.Images.Media.DISPLAY_NAME, System.currentTimeMillis() + "");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    //android Q中不再使用DATA字段，而用RELATIVE_PATH代替
+                    contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, "Pictures/Cache");
+                }
+                contentValues.put(MediaStore.Images.Media.MIME_TYPE, "image/JPEG");
+                Uri photoUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
+                if (photoUri == null) {
+                    String imageName = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                            Locale.getDefault()).format(new Date()) + ".jpg";
+                    File storageDir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()
+                            + File.separator + "Pictures" + File.separator + "Cache");
+                    if (!storageDir.exists()) storageDir.mkdirs();
+                    File tempFile = new File(storageDir, imageName);
+                    File photoFile = null;
+                    if (Environment.MEDIA_MOUNTED.equals(EnvironmentCompat.getStorageState(tempFile))) {
+                        photoFile = tempFile;
+                    }
+                    if (photoFile != null) {
+                        photoUri = Uri.fromFile(photoFile);
+                    }
+                }
+                if (photoUri != null) {
+                    newImageUri = photoUri;
+                    captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri);
+                    captureIntent.putExtra("android.intent.extra.videoQuality", 1);
+                    captureIntent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    startActivityForResult(captureIntent, CAMERA_WITH_DATA);
+                }
+            } else {
+                Toast.makeText(this, getResources().getString(R.string.warning_no_camera), Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+                Toast.makeText(this, getResources().getString(R.string.warning_no_camera), Toast.LENGTH_LONG).show();
+        }
+    }
+
+
+调用系统相册：
+
+
+@NeedsPermission({Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE})
+    void showGallery() {
+        try {
+            Intent intent = new Intent(Intent.ACTION_PICK);
+            intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+            startActivityForResult(intent, PHOTO_PICK_IMAGE);
+        } catch (Exception e) {
+            Toast.makeText(this,getResources().getString(R.string.warning_no_gallery),Toast.LENGTH_LONG).show();
+        }
+    }
