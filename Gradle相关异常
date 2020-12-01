@@ -1,0 +1,15 @@
+同步时报错：
+
+A problem occurred configuring project ':app'.
+> Failed to notify project evaluation listener.
+   > org.gradle.api.file.ProjectLayout.fileProperty(Lorg/gradle/api/provider/Provider;)Lorg/gradle/api/file/RegularFileProperty;
+
+
+错误原因：gradle版本冲突
+        项目根目录丢失gradle文件夹时，会采用默认的gradle版本
+
+解决方法：新建gradle目录或者copy别的项目的gradle，修改gradle-wrapper.properties文件，保证gradle版本对应一致
+
+gradle版本对应关系：
+
+官网链接：https://developer.android.google.cn/studio/releases/gradle-plugin
