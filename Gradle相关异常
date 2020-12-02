@@ -13,3 +13,17 @@ A problem occurred configuring project ':app'.
 gradle版本对应关系：
 
 官网链接：https://developer.android.google.cn/studio/releases/gradle-plugin
+
+
+
+运行时表现异常：
+
+可能原因：
+Android Stdio 异常关闭，导致本地文件与缓冲文件内容不一致。
+
+解决办法： 尝试 Invalidate Cache/Restar...
+
+
+打包时报错：java.io.EOFException
+
+暂未解决
