@@ -1,0 +1,69 @@
+一、饿汉式
+    优点：线程安全
+    缺点：不能延迟加载
+
+public class A {
+    private static final A instance = new A();
+    
+    private A(){}
+
+    public static A getInstance() = instance;
+
+}
+
+
+二、懒汉式
+   延迟加载，线程安全
+
+public class A {
+    private static A instance;
+    
+    private A(){
+    }
+    
+    public static A getInstance(){
+         if (instance == null) {
+              synchronized(A.class){
+                  if (instance == null) {
+                      instance = new A();
+                  }
+              }
+         }
+         return instance;
+    }
+}
+
+
+三、静态内部类
+   延迟加载，线程安全
+public class A {
+
+    private A(){}
+
+    public static A getInstance() = A.B.instance;
+    
+    private static class B {
+        private static final A instance = new A();
+    }
+
+}
+
+四、枚举
+   延迟加载，线程安全
+public class A {
+
+    private A(){}
+
+    public static A getInstance() = A.B.b.instance;
+    
+    private static enum B {
+        b;
+        private A instance;
+        private B(){
+            instance = new A();
+        }
+    }
+
+}
+
+
