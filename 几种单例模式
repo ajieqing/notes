@@ -67,3 +67,15 @@ public class A {
 }
 
 
+
+如果因为业务需要，单例对象需要序列化,并且采用了Serializable的方式进行序列化，重写readResolve可以避免单例对象被破坏
+
+
+private Object readResolve(){
+        return instance;
+}
+
+
+readResolve方法在readObject之后执行
+writeReplace方法在writeObject之前执行
+
