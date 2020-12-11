@@ -1,3 +1,19 @@
 查看安卓系统正在运行的Tasks:
 
 adb shell dumpsys activity activities | sed -En -e '/Stack #/p' -e '/Running activities/,/Run #0/p'
+
+
+Tasks启动方式：
+
+新建：（startActivity）
+
+快捷启动
+launcher启动
+通知
+其他app调起
+
+恢复：（onResume,从后台回到前台）
+
+通过menu切换
+从其他app返回
+
