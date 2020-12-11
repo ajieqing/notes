@@ -1,0 +1,3 @@
+查看安卓系统正在运行的Tasks:
+
+adb shell dumpsys activity activities | sed -En -e '/Stack #/p' -e '/Running activities/,/Run #0/p'
